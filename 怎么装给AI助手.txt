@@ -15,11 +15,15 @@
 
     话怎么说（原话就行）：
 
-      "这是法规库技能，在 <解压到哪都行>\中国医械法规库技能包\china-medical-device-regs，
+      "这是法规库技能，在 <解压到哪都行>\china-medical-device-regs，
        帮我装上，然后更新一次"
 
-    ★ 注意路径要指到里层的 china-medical-device-regs，
-      外面那层中文文件夹只是包装。
+    ★ 关键是路径要指到「里面有 SKILL.md 的那一层」。
+      这个文件夹叫什么，取决于从哪儿拿的：
+        · 从 GitHub 下载解压 → china-medical-device-regs-main
+        · 从网盘或别人发来的压缩包 → 中国医械法规库技能包\china-medical-device-regs
+      外面那层包装不用管，认准里面有 SKILL.md 就对了。
+      拿不准就直接把那个文件夹拖进对话框，比手打路径省事。
 
     关键是两句话：
       一句告诉他「这是法规库技能 + 文件夹在哪」
