@@ -1,0 +1,31 @@
+﻿Region,Category,Name,Url,Keywords,Enabled
+国家局 NMPA,飞检,国家局_医疗器械飞行检查_直达栏目,https://www.nmpa.gov.cn/directory/web/nmpa/xxgk/fxjzh/ylqxfxjch/index.html,"飞行检查,飞检,检查情况通告,检查结果通告,医疗器械飞行检查,行政检查结果公示,检查方式",true
+国家局 NMPA,不良事件,国家局_医疗器械公告通告_不良事件筛选,https://www.nmpa.gov.cn/directory/web/nmpa/ylqx/ylqxggtg/index.html,"医疗器械不良事件,不良事件监测,严重不良事件,安全警戒,警戒快讯,风险信号,不良事件报告",true
+北京,飞检,北京_监督检查信息公告_飞检,https://yjj.beijing.gov.cn/yjj/xxcx/jdjcxx/fxzxjcxx/index.html,"飞行检查,飞检,检查情况通告,检查结果通告,医疗器械飞行检查,行政检查结果公示,检查方式",true
+北京,不良事件,北京_质量公告_医疗器械,https://yjj.beijing.gov.cn/yjj/xxcx/zlgg/ylqx79/index.html,"医疗器械不良事件,不良事件监测,严重不良事件,安全警戒,警戒快讯,风险信号,不良事件报告",true
+北京,行政处罚,北京_双打案件,https://yjj.beijing.gov.cn/yjj/xxcx/pgt/sdaj/index.html,"行政处罚,处罚决定,处罚决定书,行政处罚决定书,处罚案件信息公开,罚款,没收违法所得,药监械罚,械罚,药监罚,处罚结果",true
+上海,飞检,上海_医疗器械飞行检查公告,https://yjj.sh.gov.cn/ylqxfxjcgg/index.html,"飞行检查,飞检,检查情况通告,检查结果通告,医疗器械飞行检查,行政检查结果公示,检查方式",true
+上海,行政处罚,上海_行政处罚信息公告,https://yjj.sh.gov.cn/xzcfxxgg/,"行政处罚,处罚决定,处罚决定书,行政处罚决定书,处罚案件信息公开,罚款,没收违法所得,药监械罚,械罚,药监罚,处罚结果",true
+江苏,飞检,江苏_公告通告_飞检处罚筛选,https://da.jiangsu.gov.cn/col/col84627/index.html,"飞行检查,飞检,检查结果,行政处罚,处罚决定,医疗器械不良事件,不良事件监测,暂停生产,停产整改",true
+江苏,行政处罚,江苏_行政许可和行政处罚信息公示,https://zwpt.da.jiangsu.gov.cn/,"行政处罚,处罚决定,处罚决定书,行政处罚决定书,处罚案件信息公开,罚款,没收违法所得,药监械罚,械罚,药监罚,处罚结果",true
+浙江,飞检,浙江_监督检查_飞行检查情况,https://mpa.zj.gov.cn/col/col1229893258/index.html,"飞行检查,飞检,检查情况通告,检查结果通告,医疗器械飞行检查,行政检查结果公示,检查方式",true
+浙江,行政处罚,浙江_行政处罚行政强制,https://mpa.zj.gov.cn/col/col1229678819/index.html,"行政处罚,处罚决定,处罚决定书,行政处罚决定书,处罚案件信息公开,罚款,没收违法所得,药监械罚,械罚,药监罚,处罚结果",true
+广东,飞检,广东_监督检查_飞行检查,https://mpa.gd.gov.cn/ztzl/ygzwzl/jdjc/fxjc/index.html,"飞行检查,飞检,检查情况通告,检查结果通告,医疗器械飞行检查,行政检查结果公示,检查方式",true
+广东,行政处罚,广东_行政处罚案件信息公开,https://mpa.gd.gov.cn/ztzl/zdly/xzcfaj/index.html,"行政处罚,处罚决定,处罚决定书,行政处罚决定书,处罚案件信息公开,罚款,没收违法所得,药监械罚,械罚,药监罚,处罚结果",true
+广东,行政处罚,广东_阳光政务_行政处罚,https://mpa.gd.gov.cn/ztzl/ygzwzl/xzcf/index.html,"行政处罚,处罚决定,处罚决定书,行政处罚决定书,处罚案件信息公开,罚款,没收违法所得,药监械罚,械罚,药监罚,处罚结果",true
+天津,飞检,天津_新闻动态_通告_飞检处罚筛选,https://scjg.tj.gov.cn/tjsscjdglwyh_52651/tjyj/XWDT149660/TG149685/,"飞行检查,飞检,检查结果,行政处罚,处罚决定,医疗器械不良事件,不良事件监测,暂停生产,停产整改",true
+江西,飞检,江西_公告通告_飞检暂停筛选,https://mpa.jiangxi.gov.cn/jxsypjdglj/col/col37114/,"飞行检查,飞检,检查结果,行政处罚,处罚决定,医疗器械不良事件,不良事件监测,暂停生产,停产整改",true
+江西,行政处罚,江西_医疗器械行政处罚信息公开,https://mpa.jiangxi.gov.cn/jxsypjdglj/col/col38924/,"行政处罚,处罚决定,处罚决定书,行政处罚决定书,处罚案件信息公开,罚款,没收违法所得,药监械罚,械罚,药监罚,处罚结果",true
+重庆,飞检,重庆_公告公示_飞检处罚筛选,https://yaojianju.cq.gov.cn/zwxx_217/gggs/wap.html,"飞行检查,飞检,检查结果,行政处罚,处罚决定,医疗器械不良事件,不良事件监测,暂停生产,停产整改",true
+重庆,行政处罚,重庆_公告公示_行政处罚筛选,https://yaojianju.cq.gov.cn/zwxx_217/gggs/wap.html,"行政处罚,处罚决定,处罚决定书,行政处罚决定书,处罚案件信息公开,罚款,没收违法所得,药监械罚,械罚,药监罚,处罚结果",true
+福建,飞检,福建_医疗器械_公示通告,https://yjj.scjgj.fujian.gov.cn/ylqx/gstg/,"飞行检查,飞检,检查结果,行政处罚,处罚决定,医疗器械不良事件,不良事件监测,暂停生产,停产整改",true
+福建,行政处罚,福建_政务公开_处罚筛选,https://yjj.scjgj.fujian.gov.cn/zwgk/zwgk.htm,"行政处罚,处罚决定,处罚决定书,行政处罚决定书,处罚案件信息公开,罚款,没收违法所得,药监械罚,械罚,药监罚,处罚结果",true
+安徽,不良事件,安徽_政府信息公开_不良事件监测相关,https://mpa.ah.gov.cn/public/column/4140867?action=list&catId=32716381&nav=&sub=&type=4,"医疗器械不良事件,不良事件监测,严重不良事件,安全警戒,警戒快讯,风险信号,不良事件报告",true
+安徽,行政处罚,安徽_政府信息公开_行政处罚,https://mpa.ah.gov.cn/public/column/4140867?action=list&catId=32716181&type=4,"行政处罚,处罚决定,处罚决定书,行政处罚决定书,处罚案件信息公开,罚款,没收违法所得,药监械罚,械罚,药监罚,处罚结果",true
+辽宁,飞检,辽宁_法定主动公开_监督检查,https://ypjg.ln.gov.cn/ypjg/zfxxgk/fdzdgknr/jdjc/index.shtml,"飞行检查,飞检,检查情况通告,检查结果通告,医疗器械飞行检查,行政检查结果公示,检查方式",true
+辽宁,行政处罚,辽宁_法定主动公开_处罚强制_行政处罚,https://ypjg.ln.gov.cn/ypjg/zfxxgk/fdzdgknr/cf_qz/xzcf/index.shtml,"行政处罚,处罚决定,处罚决定书,行政处罚决定书,处罚案件信息公开,罚款,没收违法所得,药监械罚,械罚,药监罚,处罚结果",true
+陕西,飞检,陕西_监管信息_日常监管信息,https://mpa.shaanxi.gov.cn/sxsypjdglj/jgxx/rcjgxx/,"飞行检查,飞检,检查情况通告,检查结果通告,医疗器械飞行检查,行政检查结果公示,检查方式",true
+陕西,行政处罚,陕西_监管信息_日常监管信息_处罚筛选,https://mpa.shaanxi.gov.cn/sxsypjdglj/jgxx/rcjgxx/,"行政处罚,处罚决定,处罚决定书,行政处罚决定书,处罚案件信息公开,罚款,没收违法所得,药监械罚,械罚,药监罚,处罚结果",true
+广西,飞检,广西_医疗器械_监督检查,https://yjj.gxzf.gov.cn/ylqx/ylqxjdjc/,"飞行检查,飞检,检查情况通告,检查结果通告,医疗器械飞行检查,行政检查结果公示,检查方式",true
+云南,飞检,云南_政府信息公开_行政检查,https://mpa.yn.gov.cn/zfxxgk/fdzdgknr/ypjg/xzjc/,"飞行检查,飞检,检查情况通告,检查结果通告,医疗器械飞行检查,行政检查结果公示,检查方式",true
+云南,行政处罚,云南_政府信息公开_行政检查_处罚筛选,https://mpa.yn.gov.cn/zfxxgk/fdzdgknr/ypjg/xzjc/,"行政处罚,处罚决定,处罚决定书,行政处罚决定书,处罚案件信息公开,罚款,没收违法所得,药监械罚,械罚,药监罚,处罚结果",true
