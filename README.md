@@ -74,6 +74,11 @@ assets/qrcode.jpg             二维码
 
 **看页面要联网吗？** 不用，数据都在本地。只有「更新」和「点开原文」需要联网。
 
+## 另外两个技能
+
+- [医疗器械产品法规标准清单生成器](https://github.com/Alynxiao/device-compliance-dossier) — 输入产品名，出注册申报用的清单
+- [医疗器械标准库](https://github.com/Alynxiao/medical-device-standards) — 国标行标目录及征求意见稿，可离线检索
+
 ## 说明
 
 数据均来自官方公开栏目，本仓库只做汇总与索引，法规原文以官方网站为准。
