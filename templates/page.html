@@ -1,0 +1,696 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<title>中国医械法规库___UPDATED__</title>
+<style>
+:root{
+  --bg:#f5f7fa; --card:#fff; --ink:#0f1e35; --muted:#6b7a90; --line:#e2e8f1;
+  --brand:#12559e; --brand-soft:#e8f1fd; --bad:#b3261e; --hi:#fff2a8;
+  --shadow:0 1px 2px rgba(16,32,64,.05),0 6px 18px rgba(16,32,64,.04);
+}
+*{box-sizing:border-box}
+html,body{height:100%}
+body{margin:0;background:var(--bg);color:var(--ink);display:flex;flex-direction:column;height:100vh;overflow:hidden;
+  font:14.5px/1.55 "Segoe UI","Microsoft YaHei",system-ui,sans-serif;}
+header{flex:0 0 auto;z-index:40;background:#fff;border-bottom:1px solid var(--line);
+  box-shadow:0 2px 10px rgba(16,32,64,.04)}
+.hd{max-width:1500px;margin:0 auto;padding:9px 22px 2px;display:flex;align-items:center;gap:16px;
+  flex-wrap:wrap;max-height:46px;overflow:hidden;transition:max-height .18s ease,opacity .18s ease,padding .18s ease}
+.hd.hide{max-height:0;opacity:0;padding-top:0;padding-bottom:0}
+h1{margin:0;font-size:17px;font-weight:700;white-space:nowrap}
+h1 .ver{font-size:12px;font-weight:500;color:var(--muted-foreground);margin-left:5px;letter-spacing:0}
+.sub{font-size:12px;color:var(--muted);white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+.searchrow{position:relative;max-width:1500px;margin:0 auto;padding:4px 22px 8px;display:flex;gap:8px;flex-wrap:wrap;align-items:center}
+input[type=search]{flex:1;min-width:300px;padding:8px 14px;border:1.5px solid var(--line);border-radius:9px;
+  font-size:14.5px;outline:none;transition:.15s}
+input[type=search]:focus{border-color:var(--brand);box-shadow:0 0 0 3px var(--brand-soft)}
+select{padding:7px 10px;border:1px solid var(--line);border-radius:8px;font-size:13px;background:#fff;color:var(--ink)}
+.sw{display:inline-flex;align-items:center;gap:6px;font-size:13px;border:1px solid var(--line);
+  border-radius:8px;padding:7px 10px;cursor:pointer;user-select:none;background:#fff;white-space:nowrap}
+.sw input{accent-color:var(--brand);cursor:pointer}
+.tabs{display:flex;gap:4px;align-items:center}
+.tab{border:1px solid transparent;background:none;border-radius:8px;padding:5px 13px;font-size:13.5px;
+  cursor:pointer;color:#4a5a72;display:flex;align-items:center;gap:6px;font-family:inherit;white-space:nowrap}
+.tab:hover{background:var(--brand-soft);color:var(--brand)}
+.tab.on{background:var(--brand);color:#fff;font-weight:600}
+.tcnt{font-size:11px;background:var(--bg);border-radius:10px;padding:1px 6px;color:var(--muted);font-weight:400}
+.tab.on .tcnt{background:rgba(255,255,255,.26);color:#fff}
+.quick{display:inline-flex;gap:6px}
+.qbtn{border:1px solid var(--line);background:#fff;border-radius:8px;padding:7px 11px;font-size:12.5px;
+  cursor:pointer;color:var(--ink);white-space:nowrap}
+.qbtn:hover{border-color:var(--brand);color:var(--brand)}
+.qbtn.on{background:var(--brand);border-color:var(--brand);color:#fff}
+.wrap{flex:1 1 auto;min-height:0;max-width:1500px;width:100%;margin:0 auto;padding:14px 22px 0;
+  display:grid;grid-template-columns:238px 1fr;gap:20px}
+aside{min-height:0;overflow-y:auto;overscroll-behavior:contain;padding-right:4px;padding-bottom:14px;
+  scrollbar-width:thin;scrollbar-color:#cfd8e3 transparent}
+aside::-webkit-scrollbar{width:6px}
+aside::-webkit-scrollbar-track{background:transparent}
+aside::-webkit-scrollbar-thumb{background:#cfd8e3;border-radius:3px}
+aside::-webkit-scrollbar-thumb:hover{background:#b4c1d1}
+.panel{background:#fff;border:1px solid var(--line);border-radius:12px;padding:8px;box-shadow:var(--shadow)}
+.panel+.panel{margin-top:9px}
+.ptitle{font-size:11px;font-weight:700;color:var(--muted);letter-spacing:.9px;margin:2px 6px 5px}
+.ptitle em{font-style:normal;color:#b9c4d4;font-weight:500;margin-left:4px}
+.nav-item,.scene{display:flex;justify-content:space-between;align-items:center;width:100%;padding:6px 8px;
+  border:0;border-radius:7px;background:none;font-size:13.3px;color:var(--ink);cursor:pointer;text-align:left}
+.nav-item:hover,.scene:hover{background:var(--brand-soft)}
+.nav-item.active,.scene.on{background:var(--brand);color:#fff}
+.nav-item.active .cnt,.scene.on .cnt{background:rgba(255,255,255,.24);color:#fff}
+.scene{border:1px solid transparent}
+.cnt{font-size:11px;color:var(--muted);background:var(--bg);border-radius:20px;padding:1px 6px}
+.histpop{position:absolute;left:22px;right:22px;top:100%;background:#fff;border:1px solid var(--line);
+  border-radius:10px;box-shadow:0 8px 24px rgba(16,32,64,.12);padding:9px 10px;z-index:60;
+  display:flex;flex-wrap:wrap;gap:6px;margin-top:2px;align-items:center}
+.histpop[hidden]{display:none}
+.histlabel{font-size:11px;color:var(--muted);margin-right:2px}
+.histitem{border:1px solid var(--line);background:var(--bg);border-radius:14px;padding:4px 11px;font-size:12.5px;
+  cursor:pointer;color:#33455e}
+.histitem:hover{border-color:var(--brand);color:var(--brand)}
+.histclear{border:0;background:none;font-size:11.5px;color:var(--muted);cursor:pointer;margin-left:auto;padding:2px 6px}
+.histclear:hover{color:var(--bad)}
+.srcnat{display:flex;align-items:center;gap:6px;font-size:11.5px;color:#5a6b82;margin:8px 7px 3px;
+  cursor:pointer;user-select:none}
+.srcnat[hidden]{display:none}
+.srcnat input{accent-color:var(--brand);cursor:pointer;margin:0}
+.srchint{font-size:10.5px;color:#9aa7b8;margin:-3px 7px 6px;line-height:1.35}
+.chips{display:flex;flex-wrap:wrap;gap:5px;padding:2px 3px}
+.chip{border:1px solid var(--line);background:#fff;border-radius:14px;padding:4px 9px;font-size:12px;
+  cursor:pointer;color:#33455e;display:inline-flex;gap:4px;align-items:center}
+.chip:hover{border-color:#0f7b6c;color:#0f7b6c}
+.chip.on{background:#0f7b6c;border-color:#0f7b6c;color:#fff}
+.chip.on .cnt{background:rgba(255,255,255,.24);color:#fff}
+.drafttip{background:#fdf6e3;border:1px solid #f0e0b8;border-left:3px solid #d4a017;border-radius:8px;
+  padding:9px 13px;font-size:12.5px;color:#7a5c00;line-height:1.6;margin:0 0 10px}
+.listhead{display:flex;justify-content:space-between;align-items:center;margin:0 2px 10px;font-size:13px;color:var(--muted)}
+.listhead b{color:var(--ink);font-size:15px}
+.crumbchip{display:inline-flex;align-items:center;gap:4px;border:1px solid var(--line);background:var(--bg);
+  border-radius:12px;padding:1px 8px;font-size:11.5px;color:#33455e;cursor:pointer;margin-left:5px;font-family:inherit}
+.crumbchip i{font-style:normal;color:#a8b3c2;font-size:12px;line-height:1}
+.crumbchip:hover{border-color:var(--bad);color:var(--bad)}
+.crumbchip:hover i{color:var(--bad)}
+.crumbclear{border:0;background:none;font-size:11.5px;color:var(--muted);cursor:pointer;margin-left:7px;
+  text-decoration:underline;font-family:inherit}
+.crumbclear:hover{color:var(--brand)}
+.card{background:#fff;border:1px solid var(--line);border-left:3px solid #9aa7b8;border-radius:10px;
+  padding:11px 14px;margin-bottom:8px;display:flex;gap:12px;align-items:flex-start;box-shadow:var(--shadow)}
+.card:hover{border-color:#c3d5ec;border-left-color:var(--brand)}
+.card.dead{background:#fbfbfc}
+.card.法律{border-left-color:#8b1e1e}.card.行政法规{border-left-color:#1a5fb4}
+.card.部门规章{border-left-color:#12805c}.card.规范性文件{border-left-color:#a86200}
+.card.指导原则{border-left-color:#7a4bd0}.card.征求意见稿{border-left-color:#b06f2a}
+.card.政策解读{border-left-color:#2b7a9b}.card.分类界定{border-left-color:#0f7b6c}
+.c-body{min-width:0;flex:1}
+.c-title{font-size:15px;font-weight:600;line-height:1.45;color:var(--ink);text-decoration:none}
+a.c-title:hover{color:var(--brand);text-decoration:underline}
+.dead .c-title{color:#98a3b3;text-decoration:line-through;text-decoration-color:#c9b3b3}
+.c-title mark{background:var(--hi);color:inherit;padding:0 1px;border-radius:2px}
+.c-info{margin-top:5px;display:flex;flex-wrap:wrap;gap:4px 9px;font-size:12px;color:var(--muted);align-items:center}
+.pill{font-size:11px;font-weight:600;padding:0 7px;border-radius:5px;line-height:1.9}
+.pill.法律{background:#fbe9e9;color:#8b1e1e}.pill.行政法规{background:#e7f0fb;color:#1a5fb4}
+.pill.部门规章{background:#e3f6ee;color:#12805c}.pill.规范性文件{background:#fdf1e0;color:#a86200}
+.pill.指导原则{background:#f0e9fd;color:#5c34a8}.pill.征求意见稿{background:#fbeee0;color:#a35a13}
+.pill.政策解读{background:#e6f3f8;color:#1d6b87}.pill.分类界定{background:#e3f5f1;color:#0f7b6c}
+.st{font-size:11px;font-weight:600;padding:0 6px;border-radius:5px;line-height:1.9}
+.st.已废止{background:#fdecea;color:var(--bad)}
+.st.已修订{background:#fff4e0;color:#a86200}
+.st.新{background:#e7f7ec;color:#0d7a3e}
+.tag{font-size:11px;color:#3d5675;background:var(--bg);border-radius:5px;padding:0 6px;line-height:1.9}
+.star{border:0;background:none;font-size:16px;line-height:1;color:#c3ccd9;cursor:pointer;padding:2px 4px;
+  flex:0 0 auto;align-self:flex-start;margin-top:2px}
+.star:hover{color:#e8a13a}
+.star.on{color:#e8a13a}
+.favbar{display:flex;align-items:center;gap:6px}
+.scenemore{width:100%;border:1px dashed var(--line);background:#fff;border-radius:7px;padding:5px;
+  font-size:12px;color:var(--brand);cursor:pointer;margin-top:3px}
+.scenemore:hover{border-color:var(--brand)}
+.empty{padding:70px 20px;text-align:center;color:var(--muted);line-height:2}
+.more{display:block;width:100%;margin:10px 0;padding:11px;border:1px dashed var(--line);border-radius:9px;
+  background:#fff;color:var(--brand);font-size:13.5px;cursor:pointer}
+.more:hover{border-color:var(--brand)}
+.more[hidden]{display:none !important}
+.pager{display:flex;justify-content:center;align-items:center;gap:6px;margin:18px 0 10px;flex-wrap:wrap}
+.pager button{border:1px solid var(--line);background:#fff;border-radius:7px;padding:6px 11px;font-size:13px;
+  cursor:pointer;color:var(--ink);min-width:36px;transition:.12s}
+.pager button:hover:not(:disabled){border-color:var(--brand);color:var(--brand)}
+.pager button.on{background:var(--brand);border-color:var(--brand);color:#fff;font-weight:600}
+.pager button:disabled{opacity:.35;cursor:default}
+.pager .info{font-size:12.5px;color:var(--muted);margin-left:10px}
+.pager .dots{color:var(--muted);padding:0 1px}
+footer{margin-top:10px;padding:14px 0 6px;border-top:1px solid var(--line);
+  font-size:12px;color:var(--muted);line-height:1.8}
+main{min-height:0;overflow-y:auto;padding-bottom:30px;scrollbar-width:thin;scrollbar-color:#cfd8e3 transparent}
+main::-webkit-scrollbar{width:8px}
+main::-webkit-scrollbar-thumb{background:#cfd8e3;border-radius:4px}
+main::-webkit-scrollbar-thumb:hover{background:#b4c1d1}
+main::-webkit-scrollbar-track{background:transparent}
+
+@media(max-width:1000px){
+  html,body{height:auto}
+  body{display:block;height:auto;overflow:auto}
+  .wrap{grid-template-columns:1fr;height:auto}
+  aside,main{overflow:visible;min-height:0}
+}
+.credit{margin-top:12px;padding:10px 12px;border:1px solid var(--line);border-radius:8px;background:var(--card);font-size:12px;line-height:1.85}
+.credit code{font-size:11px;padding:1px 5px;border-radius:4px;background:rgba(127,127,127,.12)}
+.cr-line b{font-weight:600}
+.cr-dim{color:var(--muted-foreground);font-size:11px}
+.credit{display:flex;gap:16px;align-items:center;justify-content:space-between;padding-right:26px}
+.cr-text{flex:1;min-width:0}
+.cr-qr{flex:0 0 auto;text-align:center}
+.cr-qr img{width:68px;height:68px;display:block;border-radius:5px;border:1px solid var(--line)}
+.cr-qr-tip{font-size:10px;color:var(--muted-foreground);margin-top:3px;line-height:1.2}
+</style>
+</head>
+<body>
+<header>
+  <div class="hd" id="hd">
+    <h1>中国医械法规库</h1>
+    <nav class="tabs" id="tabs">
+      <button class="tab on" data-grp="law">法规<span class="tcnt">__LAW_N__</span></button>
+      <button class="tab" data-grp="draft">征求意见稿<span class="tcnt">__DRAFT_N__</span></button>
+      <button class="tab" data-grp="notice">监管动态<span class="tcnt">__NOTICE_N__</span></button>
+    </nav>
+    <span class="sub">数据更新至 <b style="color:var(--foreground);font-weight:600">__UPDATED__</b>，由技能china-medical-device-regs V1.0.0 生成</span>
+  </div>
+  <div class="searchrow">
+    <input id="q" type="search" placeholder="直接搜：产品名、材料、环节（例如：胶原蛋白 / 注册检验 / UDI）">
+    <div class="quick">
+      <button class="qbtn" data-q="NEW">近 90 天新增</button>
+    </div>
+    <select id="year"><option value="">全部年份</option>__YEARS__</select>
+    <label class="sw"><input type="checkbox" id="onlyValid">只看现行有效</label>
+    <div class="histpop" id="histPop" hidden></div>
+  </div>
+</header>
+<div class="wrap">
+  <aside>
+    <div class="panel">
+      <div class="ptitle">我的</div>
+      <button class="nav-item" id="favBtn" data-fav="1">★ 收藏<span class="cnt" id="favCount">0</span></button>
+      <button class="nav-item" id="seenBtn">🕘 最近看过<span class="cnt" id="seenCount">0</span></button>
+    </div>
+    <div class="panel" id="lvPanel">
+      <div class="ptitle">效力层级</div>
+      <button class="nav-item active" data-lv="">全部<span class="cnt" id="cntAll"></span></button>
+      __LEVELS__
+    </div>
+    <div class="panel" id="ntPanel" hidden>
+      <div class="ptitle">通报类型</div>
+      <button class="nav-item active" data-nt="">全部<span class="cnt" id="ntAll">0</span></button>
+      __NTYPES__
+    </div>
+
+    <div class="panel">
+      <div class="ptitle">来源</div>
+      <div class="srchint">点省份默认连国家局一起看</div>
+      <div class="chips">__SRCS__</div>
+      <label class="srcnat" id="srcNatBox" hidden><input type="checkbox" id="incNat" checked> 同时看国家局的文件</label>
+    </div>
+
+    <div class="panel" id="scenePanel">
+      <div class="ptitle">主题</div>
+      <div id="scenebox">__SCENES__</div>
+      <button class="scenemore" id="sceneMore" hidden>展开全部</button>
+    </div>
+  </aside>
+  <main>
+    <div class="listhead">
+      <span><b id="shown"></b> 件 <span class="crumb" id="crumb"></span></span>
+      <span>最新发布在前</span>
+    </div>
+    <div class="drafttip" id="draftTip" hidden>这些是还在征求意见的文件，<b>尚未生效</b>，可以点进去按通告里的邮箱/平台反馈意见。反映的是接下来监管要往哪走。</div>
+    <div id="list"></div>
+    <div class="pager" id="pager"></div>
+    <footer>
+  ①离线单文件，断网可搜；点「查看」打开官方原文（需联网）。<br>
+  ②效力层级分 5 档：法律 → 行政法规 → 部门规章 → 规范性文件 → 指导原则（公告、通告、通知、征求意见稿、政策解读、分类界定都归在「规范性文件」里）。<br>
+  ③已废止的旧版保留并划掉，勾「只看现行有效」可隐藏。<br>
+  ④主题单选（再点一下取消），效力层级、来源也是单选，三者叠加是「且」的关系。<br>
+  ⑤ 来源：点「江苏」= 国家规定 + 江苏省局的细则（一起看才完整，省局文件都是国家规定的落地版）；点「国家局」= 只看国家层面；点「全部」= 所有文件。
+      <div class="credit">
+        <div class="cr-text">
+          <div class="cr-line">本技能 china-medical-device-regs 由 <b>#公众号：医械研发</b> 原创并维护，数据取自国家药监局、器审中心（CMDE）</div>
+          <div class="cr-line">等公开栏目，仅供检索参考，正式引用请以官方原文为准；</div>
+          <div class="cr-line">如与官方发布不一致，一律以官方为准。</div>
+        </div>
+        <div class="cr-qr"><img src="__QRCODE__" alt="公众号：医械研发"><div class="cr-qr-tip">扫码关注</div></div>
+      </div>
+    </footer>
+  </main>
+</div>
+<script>
+const DATA = __DATA__;
+const PAGE = 50;
+let state = {q:"", mode:"", grp:"law", level:"", nt:"", scene:"", src:"", incNat:true, year:"", onlyValid:false, onlyFav:false, onlySeen:false, page:1, filtered:[]};
+
+// ---------- 收藏（存在本机浏览器里，不上传）----------
+const FAV_KEY = "mdregs_fav_v1";
+let favs = new Set();
+try { favs = new Set(JSON.parse(localStorage.getItem(FAV_KEY) || "[]")); } catch (e) {}
+function saveFavs(){ try { localStorage.setItem(FAV_KEY, JSON.stringify([...favs])); } catch (e) {} }
+
+// ---------- 复制链接（file:// 下 navigator.clipboard 不可用，走 textarea 兜底）----------
+function copyLink(url, btn){
+  const done = () => {
+    const old = btn.textContent;
+    btn.textContent = "已复制 ✓"; btn.classList.add("done");
+    setTimeout(() => { btn.textContent = old; btn.classList.remove("done"); }, 1500);
+  };
+  const fallback = () => {
+    const ta = document.createElement("textarea");
+    ta.value = url; ta.style.position = "fixed"; ta.style.left = "-9999px";
+    document.body.appendChild(ta); ta.select();
+    try { document.execCommand("copy"); done(); } catch (e) { alert("复制失败，请手动复制：\n" + url); }
+    ta.remove();
+  };
+  if(navigator.clipboard && window.isSecureContext) navigator.clipboard.writeText(url).then(done).catch(fallback);
+  else fallback();
+}
+
+// ---------- 搜索历史 + 最近看过（同样只存本机）----------
+const HIST_KEY = "mdregs_hist_v1", SEEN_KEY = "mdregs_seen_v1";
+let hist = [], seen = [];
+try { hist = JSON.parse(localStorage.getItem(HIST_KEY) || "[]"); } catch(e){ hist = []; }
+try { seen = JSON.parse(localStorage.getItem(SEEN_KEY) || "[]"); } catch(e){ seen = []; }
+const saveHist = () => { try { localStorage.setItem(HIST_KEY, JSON.stringify(hist)); } catch(e){} };
+const saveSeen = () => { try { localStorage.setItem(SEEN_KEY, JSON.stringify(seen)); } catch(e){} };
+
+let histTimer = null;
+function pushHist(w){
+  w = (w || "").trim();
+  if(w.length < 2 || hist[0] === w) return;
+  hist = [w, ...hist.filter(x => x !== w)].slice(0, 10);
+  saveHist();
+}
+
+function renderHistPop(){
+  const pop = document.getElementById("histPop");
+  if(!hist.length){ pop.hidden = true; return; }
+  pop.innerHTML = '<span class="histlabel">最近搜过</span>'
+    + hist.map(w => '<button class="histitem" data-w="' + w.replace(/"/g, "&quot;") + '">' + w + '</button>').join("")
+    + '<button class="histclear">清空</button>';
+  pop.hidden = false;
+  pop.querySelectorAll(".histitem").forEach(b => b.addEventListener("click", () => {
+    const w = b.dataset.w;
+    document.getElementById("q").value = w;
+    state.q = w;
+    pop.hidden = true;
+    apply();
+  }));
+  pop.querySelector(".histclear").addEventListener("click", () => {
+    hist = []; saveHist(); pop.hidden = true;
+  });
+}
+
+function pushSeen(r){
+  seen = [{t: r.t, u: r.u, d: r.d, lv: r.lv, ts: Date.now()},
+          ...seen.filter(x => x.u !== r.u)].slice(0, 20);
+  saveSeen();
+  const c = document.getElementById("seenCount");
+  if(c) c.textContent = seen.length;
+}
+
+function toggleFav(url, btn){
+  if(favs.has(url)){ favs.delete(url); btn.textContent = "☆"; btn.classList.remove("on"); }
+  else { favs.add(url); btn.textContent = "★"; btn.classList.add("on"); }
+  saveFavs();
+  document.getElementById("favCount").textContent = favs.size;
+document.getElementById("seenCount").textContent = seen.length;
+document.getElementById("seenBtn").addEventListener("click", () => {
+  state.onlySeen = !state.onlySeen;
+  if(state.onlySeen){ state.onlyFav = false; $("#favBtn").classList.remove("active"); }
+  document.getElementById("seenBtn").classList.toggle("active", state.onlySeen);
+  apply();
+});
+  if(state.onlyFav) apply();
+}
+const PER = 50;   // 每页条数
+const $ = s => document.querySelector(s);
+const el = (t,c,x)=>{const e=document.createElement(t); if(c)e.className=c; if(x!=null)e.textContent=x; return e;};
+const norm = s => (s||"").toLowerCase().replace(/\s+/g,"");
+const RECENT = "2026-08-22";
+
+function hl(text, q){
+  if(!q) return document.createTextNode(text);
+  const i = text.toLowerCase().indexOf(q.toLowerCase());
+  if(i < 0) return document.createTextNode(text);
+  const f = document.createDocumentFragment();
+  f.appendChild(document.createTextNode(text.slice(0,i)));
+  f.appendChild(el("mark", null, text.slice(i, i+q.length)));
+  f.appendChild(document.createTextNode(text.slice(i+q.length)));
+  return f;
+}
+
+function apply(){
+  const q = norm(state.q);
+  state.filtered = DATA.filter(r=>{
+    if(state.onlyFav && !favs.has(r.u)) return false;
+    if(state.onlySeen && !seen.some(x => x.u === r.u)) return false;
+    if(state.onlyValid && r.st !== "现行") return false;
+    if(state.mode === "NEW" && (r.d || "") < RECENT) return false;
+    if(r.grp !== state.grp) return false;
+    if(state.grp === "notice"){ if(state.nt && r.lv !== state.nt) return false; }
+    else if(state.level && r.lv !== state.level) return false;
+    if(state.level && r.lv !== state.level) return false;
+    if(state.grp !== "notice" && state.scene && !(r.sc||[]).includes(state.scene)) return false;
+    if(state.src){
+      if(state.src === "国家"){
+        if(r.src !== "国家") return false;
+      } else if(state.incNat){
+        // 默认：国家规定 + 该省细则（省局文件是国家规定的落地）
+        if(r.src !== "国家" && r.pv !== state.src) return false;
+      } else {
+        // 取消勾选：只看这个省自己的
+        if(r.pv !== state.src) return false;
+      }
+    }
+    if(state.year && !(r.d||"").startsWith(state.year)) return false;
+    if(q && !(norm(r.t)+norm(r.n)).includes(q)) return false;
+    return true;
+  });
+  if(state.onlySeen){
+    const order = new Map(seen.map((x, i) => [x.u, i]));
+    state.filtered.sort((a, b) => (order.get(a.u) ?? 999) - (order.get(b.u) ?? 999));
+  }
+  state.page = 1;
+  $("#list").innerHTML = "";
+  $("#shown").textContent = state.filtered.length;
+  $("#draftTip").hidden = state.grp !== "draft";
+  $("#srcNatBox").hidden = !state.src || state.src === "国家";
+  renderCrumb();
+  updateCounts();
+  render();
+}
+
+// ---------- 面包屑：每个条件一个可点掉的标签 ----------
+// 来源/主题的数字跟着当前板块走（否则会出现"按钮说 5、结果 3"）
+function updateCounts(){
+  const inGrp = DATA.filter(r => r.grp === state.grp);
+  document.querySelectorAll(".srcchip").forEach(b => {
+    const v = b.dataset.src;
+    let n;
+    if(v === "") n = inGrp.length;
+    else if(v === "国家") n = inGrp.filter(r => r.src === "国家").length;
+    else n = inGrp.filter(r => r.pv === v).length;
+    const c = b.querySelector(".cnt");
+    if(c) c.textContent = n;
+    // 当前板块里没这个省的，按钮藏起来（免得看到一排 0）
+    if(v !== "" && v !== "国家") b.style.display = n > 0 ? "" : "none";
+  });
+  document.querySelectorAll(".scene").forEach(b => {
+    const t = b.dataset.topic;
+    const c = b.querySelector(".cnt");
+    if(c) c.textContent = inGrp.filter(r => (r.sc || []).includes(t)).length;
+  });
+}
+
+function renderCrumb(){
+  const box = $("#crumb");
+  box.innerHTML = "";
+  const add = (label, fn) => {
+    const b = document.createElement("button");
+    b.className = "crumbchip";
+    b.innerHTML = label + ' <i>×</i>';
+    b.title = "去掉这个条件";
+    b.addEventListener("click", () => { fn(); apply(); });
+    box.appendChild(b);
+  };
+
+  if(state.level) add(state.level, () => {
+    state.level = "";
+    document.querySelectorAll(".nav-item[data-lv]").forEach(x => x.classList.remove("active"));
+    document.querySelector('.nav-item[data-lv=""]').classList.add("active");
+  });
+  if(state.mode === "NEW") add("近90天新增", () => {
+    state.mode = "";
+    document.querySelectorAll(".qbtn").forEach(x => x.classList.toggle("on", x.dataset.q === ""));
+  });
+
+  if(state.onlyFav) add("只看收藏", () => { state.onlyFav = false; $("#favBtn").classList.remove("active"); });
+  if(state.onlySeen) add("最近看过", () => { state.onlySeen = false; $("#seenBtn").classList.remove("active"); });
+  if(state.grp === "notice" && state.nt) add(state.nt, () => {
+    state.nt = "";
+    document.querySelectorAll(".nav-item[data-nt]").forEach(x => x.classList.remove("active"));
+    document.querySelector('.nav-item[data-nt=""]').classList.add("active");
+  });
+  if(state.scene) add(state.scene, () => {
+    state.scene = "";
+    document.querySelectorAll(".scene").forEach(x => x.classList.remove("on"));
+  });
+  const srcLabel = state.src === "国家" ? "国家局"
+    : (state.incNat ? "国家局 + " + state.src + "药监局" : "只看" + state.src + "药监局");
+  if(state.src) add(srcLabel, () => {
+    state.src = "";
+    document.querySelectorAll(".srcchip").forEach(x => x.classList.toggle("on", x.dataset.src === ""));
+  });
+  if(state.year) add(state.year + "年", () => { state.year = ""; $("#year").value = ""; });
+  if(state.q.trim()) add('搜「' + state.q.trim() + '」', () => { state.q = ""; $("#q").value = ""; });
+
+  if(box.children.length){
+    const cl = document.createElement("button");
+    cl.className = "crumbclear";
+    cl.textContent = "清除全部";
+    cl.addEventListener("click", clearAll);
+    box.appendChild(cl);
+  }
+}
+
+function clearAll(){
+  state.q = ""; state.mode = ""; state.year = ""; state.level = ""; state.nt = ""; state.onlyValid = false;
+  state.scene = ""; state.src = ""; state.incNat = true; state.onlyFav = false; state.onlySeen = false;
+  const _inc = document.getElementById("incNat"); if(_inc) _inc.checked = true;
+  $("#favBtn").classList.remove("active");
+  $("#seenBtn").classList.remove("active");
+  $("#q").value = ""; $("#year").value = ""; $("#onlyValid").checked = false;
+  document.querySelectorAll(".qbtn").forEach(x => x.classList.toggle("on", x.dataset.q === ""));
+  document.querySelectorAll(".nav-item[data-lv]").forEach(x => x.classList.toggle("active", x.dataset.lv === ""));
+  document.querySelectorAll(".nav-item[data-nt]").forEach(x => x.classList.toggle("active", x.dataset.nt === ""));
+  document.querySelectorAll(".scene").forEach(x => x.classList.remove("on"));
+  document.querySelectorAll(".srcchip").forEach(x => x.classList.toggle("on", x.dataset.src === ""));
+  apply();
+}
+
+
+
+function render(){
+  const box = $("#list");
+  const total = state.filtered.length;
+  if(!total){
+    const cond = [];
+    if(state.level) cond.push(state.level);
+    if(state.scene) cond.push(state.scene);
+    if(state.src) cond.push(state.src === "国家" ? "国家局" : "国家局 + " + state.src + "药监局");
+    if(state.year) cond.push(state.year + "年");
+    if(state.mode === "NEW") cond.push("近90天新增");
+    if(state.onlyFav) cond.push("只看收藏");
+    if(state.onlySeen) cond.push("最近看过");
+    const where = cond.length ? "在「" + cond.join(" · ") + "」范围内" : "在全库里";
+    const q = state.q.trim();
+    box.innerHTML = '<div class="empty">没找到相关法规<br><small>'
+      + (q ? where + '没有含着「' + q + '」的文件' : where + '没有文件')
+      + '<br>可以换个更短的词（比如只搜「胶原」），或点「清除」放宽条件</small></div>';
+    $("#pager").innerHTML = "";
+    return;
+  }
+  const pages = Math.max(1, Math.ceil(total / PER));
+  if(state.page > pages) state.page = pages;
+  const start = (state.page - 1) * PER;
+  const slice = state.filtered.slice(start, start + PER);
+  box.innerHTML = "";
+  for(const r of slice){
+    const card = el("div","card " + (r.lv||"规范性文件") + (r.st==="已废止" ? " dead" : ""));
+    const star = el("button","star" + (favs.has(r.u) ? " on" : ""), favs.has(r.u) ? "★" : "☆");
+    star.title = "收藏（只存本机）";
+    star.addEventListener("click", ev => { ev.preventDefault(); ev.stopPropagation(); toggleFav(r.u, star); });
+    card.appendChild(star);
+    const body = el("div","c-body");
+    const a = el("a","c-title"); a.href=r.u; a.target="_blank"; a.rel="noreferrer";
+    a.addEventListener("click", () => pushSeen(r));
+    a.appendChild(hl(r.t, state.q.trim()));
+    body.appendChild(a);
+    const info = el("div","c-info");
+    info.appendChild(el("span","pill "+(r.lv||"规范性文件"), r.lv||"规范性文件"));
+    if(r.y && r.y!==r.lv) info.appendChild(el("span","tag",r.y));
+    if(r.st && r.st!=="现行") info.appendChild(el("span","st "+r.st, r.st));
+    else if((r.d||"") >= RECENT) info.appendChild(el("span","st 新","新"));
+    if(r.src==="省级" && r.o) info.appendChild(el("span","tag",r.o));
+    if(r.n) info.appendChild(el("span",null,r.n));
+    if(r.d) info.appendChild(el("span",null,r.d));
+    for(const k of (r.sc||[]).slice(0,3)) info.appendChild(el("span","tag",k));
+    body.appendChild(info);
+    card.appendChild(body);
+    box.appendChild(card);
+  }
+  renderPager(total, pages);
+}
+
+function goTop(){
+  // 滚动容器是右侧 main，不是 window（body 是 overflow:hidden，window 滚不动）
+  const m = document.querySelector("main");
+  if(m){ m.scrollTo({top: 0, behavior: "smooth"}); return; }
+  const lh = document.querySelector(".listhead");
+  if(lh) window.scrollTo({top: lh.getBoundingClientRect().top + window.scrollY - 130, behavior: "smooth"});
+}
+
+function renderPager(total, pages){
+  const box = $("#pager");
+  if(pages <= 1){ box.innerHTML = '<span class="info">共 ' + total + ' 件</span>'; return; }
+  const cur = state.page;
+  const set = new Set([1, pages]);
+  for(let i = cur - 2; i <= cur + 2; i++) if(i > 1 && i < pages) set.add(i);
+  const nums = [...set].sort((a, b) => a - b);
+  let h = '<button data-p="' + Math.max(1, cur - 1) + '"' + (cur === 1 ? " disabled" : "") + '>上一页</button>';
+  let prev = 0;
+  for(const n of nums){
+    if(prev && n - prev > 1) h += '<span class="dots">…</span>';
+    h += '<button data-p="' + n + '"' + (n === cur ? ' class="on"' : "") + '>' + n + '</button>';
+    prev = n;
+  }
+  h += '<button data-p="' + Math.min(pages, cur + 1) + '"' + (cur === pages ? " disabled" : "") + '>下一页</button>';
+  h += '<span class="info">共 ' + total + ' 件 · 第 ' + cur + '/' + pages + ' 页</span>';
+  box.innerHTML = h;
+  box.querySelectorAll("button[data-p]").forEach(b => {
+    b.addEventListener("click", () => {
+      if(b.disabled) return;
+      state.page = +b.dataset.p;
+      render();
+      goTop();
+    });
+  });
+}
+
+
+// ---------- 筛选与搜索的交互 ----------
+$("#q").addEventListener("input", e => {
+  state.q = e.target.value;
+  clearTimeout(histTimer);
+  const v = e.target.value.trim();
+  if(v.length >= 2) histTimer = setTimeout(() => pushHist(v), 900);
+  apply();
+});
+$("#q").addEventListener("focus", renderHistPop);
+document.addEventListener("click", e => {
+  const pop = document.getElementById("histPop");
+  if(pop && !pop.hidden && !e.target.closest("#histPop") && e.target.id !== "q") pop.hidden = true;
+});
+$("#year").addEventListener("change", e => { state.year = e.target.value; apply(); });
+$("#onlyValid").addEventListener("change", e => { state.onlyValid = e.target.checked; apply(); });
+
+document.querySelectorAll(".qbtn").forEach(b => b.addEventListener("click", () => {
+  document.querySelectorAll(".qbtn").forEach(x => x.classList.remove("on"));
+  b.classList.add("on");
+  state.mode = b.dataset.q;
+  apply();
+}));
+
+// ---------- 板块导航 ----------
+function syncPanels(){
+  const g = state.grp;
+  document.getElementById("lvPanel").hidden = g !== "law";
+  document.getElementById("ntPanel").hidden = g !== "notice";
+  document.getElementById("scenePanel").hidden = g === "notice";
+  document.getElementById("draftTip").hidden = g !== "draft";
+}
+
+document.querySelectorAll(".tab").forEach(t => t.addEventListener("click", () => {
+  if(t.dataset.grp === state.grp) return;
+  document.querySelectorAll(".tab").forEach(x => x.classList.remove("on"));
+  t.classList.add("on");
+  state.grp = t.dataset.grp;
+  // 切板块：清掉专属条件（省份、搜索词、年份保留）
+  state.level = ""; state.nt = ""; state.scene = "";
+  document.querySelectorAll(".nav-item[data-lv]").forEach(x => x.classList.toggle("active", x.dataset.lv === ""));
+  document.querySelectorAll(".nav-item[data-nt]").forEach(x => x.classList.toggle("active", x.dataset.nt === ""));
+  document.querySelectorAll(".scene").forEach(x => x.classList.remove("on"));
+  foldScenes();
+  syncPanels();
+  apply();
+}));
+
+// 通报类型
+document.querySelectorAll(".nav-item[data-nt]").forEach(b => b.addEventListener("click", () => {
+  document.querySelectorAll(".nav-item[data-nt]").forEach(x => x.classList.remove("active"));
+  b.classList.add("active");
+  state.nt = b.dataset.nt;
+  apply();
+}));
+
+document.querySelectorAll(".nav-item[data-lv]").forEach(b => b.addEventListener("click", () => {
+  document.querySelectorAll(".nav-item[data-lv]").forEach(x => x.classList.remove("active"));
+  b.classList.add("active");
+  state.level = b.dataset.lv;
+  apply();
+}));
+
+document.getElementById("incNat").addEventListener("change", e => {
+  state.incNat = e.target.checked;
+  apply();
+});
+
+document.querySelectorAll(".srcchip").forEach(b => b.addEventListener("click", () => {
+  document.querySelectorAll(".srcchip").forEach(x => x.classList.remove("on"));
+  b.classList.add("on");
+  state.src = b.dataset.src;
+  apply();
+}));
+
+document.querySelectorAll(".scene").forEach(b => b.addEventListener("click", () => {
+  const t = b.dataset.topic, wasOn = b.classList.contains("on");
+  document.querySelectorAll(".scene").forEach(x => x.classList.remove("on"));
+  if(wasOn){ state.scene = ""; }
+  else { state.scene = t; b.classList.add("on"); }
+  apply();
+}));
+
+// 收藏筛选按钮
+$("#favBtn").addEventListener("click", () => {
+  state.onlyFav = !state.onlyFav;
+  if(state.onlyFav){ state.onlySeen = false; $("#seenBtn").classList.remove("active"); }
+  $("#favBtn").classList.toggle("active", state.onlyFav);
+  apply();
+});
+document.getElementById("favCount").textContent = favs.size;
+document.getElementById("seenCount").textContent = seen.length;
+document.getElementById("seenBtn").addEventListener("click", () => {
+  state.onlySeen = !state.onlySeen;
+  if(state.onlySeen){ state.onlyFav = false; $("#favBtn").classList.remove("active"); }
+  document.getElementById("seenBtn").classList.toggle("active", state.onlySeen);
+  apply();
+});
+
+// 主题默认只露前 6 个，其余折叠
+function foldScenes(){
+  const box = document.getElementById("scenebox");
+  const btns = [...box.querySelectorAll(".scene")];
+  const SHOW = 6;
+  const more = document.getElementById("sceneMore");
+  btns.forEach((b, i) => { b.style.display = i >= SHOW ? "none" : ""; });
+  more.dataset.open = "0";
+  more.hidden = btns.length <= SHOW;
+  more.textContent = "展开全部 " + btns.length + " 个 ▾";
+}
+function initSceneFold(){
+  const more = document.getElementById("sceneMore");
+  more.addEventListener("click", () => {
+    const box = document.getElementById("scenebox");
+    const btns = [...box.querySelectorAll(".scene")];
+    const SHOW = 6;
+    const open = more.dataset.open === "1";
+    btns.forEach((b, i) => { if(i >= SHOW) b.style.display = open ? "none" : ""; });
+    more.dataset.open = open ? "0" : "1";
+    more.textContent = open ? "展开全部 " + btns.length + " 个 ▾" : "收起 ︿";
+  });
+  foldScenes();
+}
+initSceneFold();
+
+$("#cntAll").textContent = DATA.filter(r => r.grp === "law").length;
+document.getElementById("ntAll").textContent = DATA.filter(r => r.grp === "notice").length;
+syncPanels();
+apply();
+</script>
+</body>
+</html>
