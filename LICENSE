@@ -19,12 +19,3 @@ AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER
 LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM,
 OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
 SOFTWARE.
-
----
-
-关于数据的说明（不属于上述软件许可范围）：
-
-本项目中的法规条文、法规文件及其内容，均来自国家药品监督管理局、器审中心及各省药品监督
-管理局的官方公开栏目，属于官方公开信息，其权益归原发布机关所有，不适用上述 MIT 许可。
-
-MIT 许可仅覆盖本仓库自行编写的代码、脚本、页面模板与文档。
