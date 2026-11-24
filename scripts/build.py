@@ -29,6 +29,22 @@ from collections import Counter, OrderedDict
 HERE = os.path.dirname(os.path.abspath(__file__))
 DEFAULT_DATA = os.path.join(HERE, "..", "data", "cn_regs.jsonl")
 DEFAULT_TPL = os.path.join(HERE, "..", "templates", "page.html")
+# 技能版本的唯一真源：本文件同级目录里的 SKILL.md frontmatter `version`。
+# 页面模板写 V__VERSION__，由 build() 渲染时填入；任何别处都不要手写版本号。
+SKILL_MD = os.path.join(HERE, "..", "SKILL.md")
+
+
+def read_skill_version():
+    """从 SKILL.md frontmatter 读 version —— 技能版本只有这一个真源。"""
+    try:
+        with open(SKILL_MD, encoding="utf-8") as f:
+            head = f.read(2000)
+        m = re.search(r"^version:\s*([0-9][0-9A-Za-z.\-]*)", head, re.M)
+        if m:
+            return m.group(1)
+    except OSError:
+        pass
+    return "unknown"
 # 默认输出名带数据版本，由 build() 里按最新日期拼；这里只留目录
 OUT_DIR = os.path.abspath(os.path.join(HERE, ".."))
 BASE_NAME = "中国医械法规库"
@@ -566,7 +582,7 @@ def build(src, out, tpl_path):
     latest = max((r["date"] for r in rows if r["date"]), default=updated)
 
     # 文件名 = 页面里的名字，两者一致：中国医疗器械法规全集_2026-11-19.html
-    # 那个日期只是「这批数据更新到哪天」，不是版本号；技能版本固定 v1.0.0
+    # 那个日期只是「这批数据更新到哪天」，不是版本号；版本号唯一真源是 SKILL.md frontmatter
     if not out or os.path.isdir(out or ""):
         _dir = out if out else OUT_DIR
         out = os.path.join(_dir, f"{BASE_NAME}_{latest}.html")
@@ -616,6 +632,7 @@ def build(src, out, tpl_path):
                .replace("__YEARS__", year_opts)
                .replace("__TOTAL__", str(len(rows)))
                .replace("__UPDATED__", latest)
+               .replace("__VERSION__", read_skill_version())
                .replace("__GENTIME__", time.strftime("%Y-%m-%d %H:%M"))
                .replace("__QRCODE__", qr_data_uri())
                .replace("__ABOLISHED__", str(st.get("已废止", 0))))

@@ -16,7 +16,7 @@ metadata:
 
 ## 版本纪律
 
-**V1.0.0 已于 2026-11-21 定稿。**
+**初版已于 2026-11-21 定稿。版本号只有一处真源：本文件 frontmatter 的 `version`。**
 
 - 功能性改动（新数据源、抓取规则、页面结构）→ 升 **1.0.1** 并写明改了什么
 - 纯文案/像素微调 → **不升版**
@@ -26,7 +26,7 @@ metadata:
 
 | 叫什么 | 在哪 | 怎么变 |
 |---|---|---|
-| 技能版本 | frontmatter `version: 1.0.0`；页面顶部「…由技能china-medical-device-regs V1.0.0 生成」 | 定稿后按上面规矩走 |
+| 技能版本 | **唯一真源：frontmatter `version`**；页面顶部「…由技能china-medical-device-regs V\_\_VERSION\_\_ 生成」由 build.py 渲染时填入 | **只改 frontmatter，不要手改页面** |
 | 数据日期 | 页面顶部「数据更新至 YYYY-MM-DD」；文件名 `中国医械法规库_YYYY-MM-DD.html`；浏览器标签 | 自动取库内最新一条文件的发布日期。**不是版本号，前面不加 V** |
 | 包名日期 | `中国医械法规库_261121.zip` | 只是分发时间戳 |
 
@@ -47,8 +47,9 @@ metadata:
 
 顶部一行（跟在大标题和三个板块数字后面）：
 ```
-数据更新至 YYYY-MM-DD，由技能china-medical-device-regs V1.0.0 生成
+数据更新至 YYYY-MM-DD，由技能china-medical-device-regs V__VERSION__ 生成
 ```
+其中 `__VERSION__` 由 build.py 从本文件 frontmatter 的 `version` 读入，运行时显示的是实际版本号。
 
 底部三行（在 ①~⑤ 使用说明下面，单独灰底卡片 `.credit`）：
 ```
