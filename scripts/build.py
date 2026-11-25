@@ -29,6 +29,16 @@ from collections import Counter, OrderedDict
 HERE = os.path.dirname(os.path.abspath(__file__))
 DEFAULT_DATA = os.path.join(HERE, "..", "data", "cn_regs.jsonl")
 DEFAULT_TPL = os.path.join(HERE, "..", "templates", "page.html")
+# 默认输出名带数据版本，由 build() 里按最新日期拼；这里只留目录
+OUT_DIR = os.path.abspath(os.path.join(HERE, ".."))
+BASE_NAME = "中国医械法规库"
+# 监管动态命中表：优先读包内 logs/（notice_watch.py 就写在这里），
+# 找不到才回退到同级 notice-watch 技能。写死包外路径会让独立用户静默丢两类通报。
+_LOCAL_LOGS = os.path.abspath(os.path.join(HERE, "..", "logs"))
+_EXTERNAL_LOGS = os.path.abspath(os.path.join(HERE, "..", "..", "notice-watch", "logs"))
+NOTICE_DIR = _LOCAL_LOGS if os.path.isdir(_LOCAL_LOGS) else _EXTERNAL_LOGS
+# 监管动态只留最近 12 个月
+NOTICE_CUTOFF = "2025-11-21"
 # 技能版本的唯一真源：本文件同级目录里的 SKILL.md frontmatter `version`。
 # 页面模板写 V__VERSION__，由 build() 渲染时填入；任何别处都不要手写版本号。
 SKILL_MD = os.path.join(HERE, "..", "SKILL.md")
@@ -45,16 +55,6 @@ def read_skill_version():
     except OSError:
         pass
     return "unknown"
-# 默认输出名带数据版本，由 build() 里按最新日期拼；这里只留目录
-OUT_DIR = os.path.abspath(os.path.join(HERE, ".."))
-BASE_NAME = "中国医械法规库"
-# 监管动态命中表：优先读包内 logs/（notice_watch.py 就写在这里），
-# 找不到才回退到同级 notice-watch 技能。写死包外路径会让独立用户静默丢两类通报。
-_LOCAL_LOGS = os.path.abspath(os.path.join(HERE, "..", "logs"))
-_EXTERNAL_LOGS = os.path.abspath(os.path.join(HERE, "..", "..", "notice-watch", "logs"))
-NOTICE_DIR = _LOCAL_LOGS if os.path.isdir(_LOCAL_LOGS) else _EXTERNAL_LOGS
-# 监管动态只留最近 12 个月
-NOTICE_CUTOFF = "2025-11-21"
 
 
 def clean(t):
@@ -73,7 +73,7 @@ def status_of(t):
 ORG = {
     "nmpa_fgwj": "国家药监局", "cmde_fg": "国务院", "cmde_guizh": "国家药监局",
     "cmde_fgwj": "国家药监局", "cmde_zdyz": "器审中心", "cmde_zqyj": "器审中心",
-    "cmde_gztg": "器审中心", "nmpa_zcjd": "国家药监局",
+    "cmde_gztg": "器审中心", "nmpa_zcjd": "国家药监局", "nmpa_zqyj": "国家药监局",
     "gd_gzwj": "广东省药监局", "gd_fgjd": "广东省药监局", "nidc_fljd": "中检院",
     # 省级药监局（只收省局自己发的实施细则/工作程序，转发的国家局文件已在抓取时剔除）
     "js_jsfg": "江苏省药监局", "js_gfxwj": "江苏省药监局", "js_flgz": "江苏省药监局",
@@ -120,6 +120,37 @@ def province_of(r):
 
 LEVEL_ORDER = ["法律", "行政法规", "部门规章", "规范性文件", "指导原则"]
 
+# ---------- 「一条通告发多项」的隐藏关键词（1.0.1 新增）----------
+# 问题：标题只点第一册（如「…无菌医疗器械检查指导原则等4个」），附件里其实还有
+# 体外诊断试剂、植入、定制式义齿。用户按附件里的册名搜，本该搜到这条通告，
+# 但标题里没这个字，永远命中不了。
+# 范围有界：只补「成册印发、标题写不全」这一类少数。全库 325 条「等N项/等N个」
+# 绝大多数标题已经点了类别（如「等16项第二类体外诊断试剂」），不需要补，也不去
+# 逐条读正文附件——成本高、收益低。加新规则前先确认标题确实漏了类别。
+KW_RULES = [
+    (r"生产质量管理规范无菌医疗器械检查指导原则等\s*4\s*个",
+     ["植入性医疗器械", "体外诊断试剂", "定制式义齿"]),
+    (r"生产质量管理规范现场检查指导原则等\s*4\s*个",
+     ["无菌医疗器械", "植入性医疗器械", "体外诊断试剂"]),
+    (r"生产质量管理规范检查指导原则的通知",
+     ["无菌医疗器械", "植入性医疗器械", "体外诊断试剂", "定制式义齿", "独立软件"]),
+]
+_KW_CACHE = {}
+
+
+def kw_of(title):
+    """返回该标题的隐藏关键词（空格分隔），没有就返回空串。"""
+    t = title or ""
+    if t in _KW_CACHE:
+        return _KW_CACHE[t]
+    out = []
+    for pat, words in KW_RULES:
+        if re.search(pat, t):
+            out += [w for w in words if w not in out]
+    _KW_CACHE[t] = " ".join(out)
+    return _KW_CACHE[t]
+
+
 
 def org_of(r):
     o = ORG.get(r.get("col", ""), "国家药监局")
@@ -138,7 +169,7 @@ def dtype_of(r):
         return "法律"
     if c == "nidc_fljd":
         return "分类界定"
-    if "征求意见" in b or c == "cmde_zqyj":
+    if "征求意见" in b or c in ("cmde_zqyj", "nmpa_zqyj"):
         return "征求意见稿"
     if re.search(r"指导原则|审查指南|检查指南|审评要点|技术审查要点", b) and not re.search(r"通知$|公告$|通告$", b):
         return "指导原则"
@@ -590,6 +621,7 @@ def build(src, out, tpl_path):
     payload = [{"t": r["utitle"], "u": r["url"], "d": r["date"], "n": r["docno"],
                 "o": r["org"], "y": r["dtype"], "st": r["status"], "lv": r["lv"],
                 "src": r["source"], "pv": r["prov"], "sc": r["topics"], "pr": [],
+                "k": kw_of(r["utitle"]),
                 "grp": r.get("grp", "law")} for r in rows]
     data_json = json.dumps(payload, ensure_ascii=False, separators=(",", ":"))
 
@@ -632,10 +664,10 @@ def build(src, out, tpl_path):
                .replace("__YEARS__", year_opts)
                .replace("__TOTAL__", str(len(rows)))
                .replace("__UPDATED__", latest)
-               .replace("__VERSION__", read_skill_version())
                .replace("__GENTIME__", time.strftime("%Y-%m-%d %H:%M"))
                .replace("__QRCODE__", qr_data_uri())
-               .replace("__ABOLISHED__", str(st.get("已废止", 0))))
+               .replace("__ABOLISHED__", str(st.get("已废止", 0)))
+               .replace("__VERSION__", read_skill_version()))
     os.makedirs(os.path.dirname(os.path.abspath(out)), exist_ok=True)
     open(out, "w", encoding="utf-8").write(html)
 

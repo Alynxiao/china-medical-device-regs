@@ -106,7 +106,11 @@ aside::-webkit-scrollbar-thumb:hover{background:#b4c1d1}
 .c-title{font-size:15px;font-weight:600;line-height:1.45;color:var(--ink);text-decoration:none}
 a.c-title:hover{color:var(--brand);text-decoration:underline}
 .dead .c-title{color:#98a3b3;text-decoration:line-through;text-decoration-color:#c9b3b3}
-.c-title mark{background:var(--hi);color:inherit;padding:0 1px;border-radius:2px}
+.c-title mark{background:#ffe27a;color:inherit;padding:0 1px;border-radius:2px;font-weight:700}
+/* 命中高亮只做一种颜色。标准库有两种（名称/适用范围），是因为它有两个信息源；
+   法规库的文字只有标题一处（文号也总写在标题括号里，全库 4259 条无例外），
+   分色只会让同一个词在标题和元信息行出现两种颜色，反而看乱。
+   原来的 #fff2a8 淡到在白底上几乎看不见，等于标了没用，换成饱和黄 + 加粗。 */
 .c-info{margin-top:5px;display:flex;flex-wrap:wrap;gap:4px 9px;font-size:12px;color:var(--muted);align-items:center}
 .pill{font-size:11px;font-weight:600;padding:0 7px;border-radius:5px;line-height:1.9}
 .pill.法律{background:#fbe9e9;color:#8b1e1e}.pill.行政法规{background:#e7f0fb;color:#1a5fb4}
@@ -118,6 +122,8 @@ a.c-title:hover{color:var(--brand);text-decoration:underline}
 .st.已修订{background:#fff4e0;color:#a86200}
 .st.新{background:#e7f7ec;color:#0d7a3e}
 .tag{font-size:11px;color:#3d5675;background:var(--bg);border-radius:5px;padding:0 6px;line-height:1.9}
+/* 隐藏关键词标签：标题里没写、附件里才有。虚线边框跟普通主题标签区分，不然用户以为标题打错了 */
+.kwtag{border:1px dashed #b9c4d4;background:#fff;color:#54627a}
 .star{border:0;background:none;font-size:16px;line-height:1;color:#c3ccd9;cursor:pointer;padding:2px 4px;
   flex:0 0 auto;align-self:flex-start;margin-top:2px}
 .star:hover{color:#e8a13a}
@@ -244,7 +250,7 @@ main::-webkit-scrollbar-track{background:transparent}
 <script>
 const DATA = __DATA__;
 const PAGE = 50;
-let state = {q:"", mode:"", grp:"law", level:"", nt:"", scene:"", src:"", incNat:true, year:"", onlyValid:false, onlyFav:false, onlySeen:false, page:1, filtered:[]};
+let state = {q:"", terms:[], autoSplit:false, mode:"", grp:"law", level:"", nt:"", scene:"", src:"", incNat:true, year:"", onlyValid:false, onlyFav:false, onlySeen:false, page:1, filtered:[]};
 
 // ---------- 收藏（存在本机浏览器里，不上传）----------
 const FAV_KEY = "mdregs_fav_v1";
@@ -318,13 +324,6 @@ function toggleFav(url, btn){
   else { favs.add(url); btn.textContent = "★"; btn.classList.add("on"); }
   saveFavs();
   document.getElementById("favCount").textContent = favs.size;
-document.getElementById("seenCount").textContent = seen.length;
-document.getElementById("seenBtn").addEventListener("click", () => {
-  state.onlySeen = !state.onlySeen;
-  if(state.onlySeen){ state.onlyFav = false; $("#favBtn").classList.remove("active"); }
-  document.getElementById("seenBtn").classList.toggle("active", state.onlySeen);
-  apply();
-});
   if(state.onlyFav) apply();
 }
 const PER = 50;   // 每页条数
@@ -333,19 +332,99 @@ const el = (t,c,x)=>{const e=document.createElement(t); if(c)e.className=c; if(x
 const norm = s => (s||"").toLowerCase().replace(/\s+/g,"");
 const RECENT = "2026-08-22";
 
-function hl(text, q){
-  if(!q) return document.createTextNode(text);
-  const i = text.toLowerCase().indexOf(q.toLowerCase());
-  if(i < 0) return document.createTextNode(text);
-  const f = document.createDocumentFragment();
-  f.appendChild(document.createTextNode(text.slice(0,i)));
-  f.appendChild(el("mark", null, text.slice(i, i+q.length)));
-  f.appendChild(document.createTextNode(text.slice(i+q.length)));
-  return f;
+// 把命中词包成 <mark>。q 可以是单串，也可以是词数组（多词检索时全都要标）。
+// 四处必须注意，少一处就是「搜得到却标不出来」：
+//  1. 搜索比较走 norm()（把空白全去掉再比），所以这里也必须按「忽略空白」定位——
+//     否则搜「一次性 无菌」过滤能中，标题里却找不到这串连续的字，一个字都不标。
+//  2. 全部出现都要标，不能只标第一处（原来只用 indexOf 取第一次，标题里出现两三次只亮一个）。
+//  3. 多词时区间要合并，否则「体外诊断试剂」和「试剂」重叠处会切成两层 mark，颜色发深。
+//  4. 返回 DocumentFragment，调用方用 appendChild 挂——不要拼 HTML 字符串，标题里有引号会断。
+function hl(text, q, cls){
+  const s = String(text==null ? "" : text);
+  const terms = (Array.isArray(q) ? q : [q])
+    .map(t => String(t||"").replace(/\s+/g,"").toLowerCase()).filter(Boolean);
+  if(!terms.length) return document.createTextNode(s);
+  const pos = [];              // 去掉空白后第 n 个字，对应原文里的下标
+  let flat = "";
+  for(let i=0;i<s.length;i++){
+    if(!/\s/.test(s[i])){ pos.push(i); flat += s[i].toLowerCase(); }
+  }
+  const spans = [];
+  for(const t of terms){
+    let at = 0, hit;
+    while((hit = flat.indexOf(t, at)) >= 0){ spans.push([hit, hit + t.length]); at = hit + t.length; }
+  }
+  if(!spans.length) return document.createTextNode(s);
+  spans.sort((a,b) => a[0]-b[0] || b[1]-a[1]);
+  const merged = [];
+  for(const sp of spans){
+    const last = merged[merged.length-1];
+    if(last && sp[0] <= last[1]) last[1] = Math.max(last[1], sp[1]);
+    else merged.push([sp[0], sp[1]]);
+  }
+  const frag = document.createDocumentFragment();
+  let cursor = 0;
+  for(const [a,b] of merged){
+    const st = pos[a], en = pos[b-1] + 1;
+    if(st > cursor) frag.appendChild(document.createTextNode(s.slice(cursor, st)));
+    frag.appendChild(el("mark", cls || null, s.slice(st, en)));
+    cursor = en;
+  }
+  if(cursor < s.length) frag.appendChild(document.createTextNode(s.slice(cursor)));
+  return frag;
+}
+
+// ---------- 搜索：多词同时包含 + 整句失败自动拆词 ----------
+// 为什么要有这层：原来是把整句当一个连续字符串比，搜「体外诊断试剂检查指导原则」
+// 要求这九个字在标题里连着出现，而库里没有任何标题这么写 → 一条也搜不到。
+// 现在的判据：
+//   1. 输入里有空格/逗号/加号 → 就按这些切成多个词，全部命中才算（AND）。
+//   2. 输入是一整串、且整串在全库一条都不中 → 自动从长到短找能命中的片段切开，
+//      切完在面包屑上写明「已自动拆词」，让用户知道结果不是整句匹配来的。
+//   3. 命中范围包含隐藏关键词 k（build.py 补的，用于「一条通告发多项」——标题只写
+//      无菌、实际附件里有体外诊断试剂那种），卡片上会标「含：XX」。
+let _poolGrp = "", _poolStr = "";
+function poolText(grp){
+  if(_poolGrp !== grp){
+    _poolGrp = grp;
+    _poolStr = DATA.filter(r => r.grp === grp)
+                  .map(r => norm(r.t) + norm(r.n) + norm(r.k)).join("\u0001");
+  }
+  return _poolStr;
+}
+const poolHas = t => poolText(state.grp).indexOf(t) >= 0;
+
+function termsOf(raw){
+  const s = String(raw||"").trim();
+  if(!s) return [];
+  const parts = s.split(/[\s,，、+]+/).map(norm).filter(Boolean);
+  if(parts.length > 1) return parts;
+  const one = parts[0];
+  if(one.length <= 2 || poolHas(one)) return [one];
+  const segs = [];
+  let i = 0;
+  while(i < one.length){
+    let picked = "";
+    for(let len = Math.min(one.length - i, 14); len >= 2; len--){
+      const cand = one.substr(i, len);
+      if(poolHas(cand)){ picked = cand; break; }
+    }
+    if(picked){ segs.push(picked); i += picked.length; }
+    else i++;                       // 这个字在库里找不到归处，跳过，避免拼出永远搜不到的段
+  }
+  return segs.length ? segs : [one];
+}
+
+function prepQuery(){
+  const raw = String(state.q||"").trim();
+  state.terms = termsOf(raw);
+  const byUser = /[\s,，、+]/.test(raw);
+  state.autoSplit = !byUser && state.terms.length > 1;
 }
 
 function apply(){
-  const q = norm(state.q);
+  prepQuery();
+  const terms = state.terms;
   state.filtered = DATA.filter(r=>{
     if(state.onlyFav && !favs.has(r.u)) return false;
     if(state.onlySeen && !seen.some(x => x.u === r.u)) return false;
@@ -368,7 +447,10 @@ function apply(){
       }
     }
     if(state.year && !(r.d||"").startsWith(state.year)) return false;
-    if(q && !(norm(r.t)+norm(r.n)).includes(q)) return false;
+    if(terms.length){
+      const hay = norm(r.t) + norm(r.n) + norm(r.k);
+      for(const t of terms) if(hay.indexOf(t) < 0) return false;
+    }
     return true;
   });
   if(state.onlySeen){
@@ -447,7 +529,12 @@ function renderCrumb(){
     document.querySelectorAll(".srcchip").forEach(x => x.classList.toggle("on", x.dataset.src === ""));
   });
   if(state.year) add(state.year + "年", () => { state.year = ""; $("#year").value = ""; });
-  if(state.q.trim()) add('搜「' + state.q.trim() + '」', () => { state.q = ""; $("#q").value = ""; });
+  if(state.terms && state.terms.length > 1){
+    const note = state.autoSplit ? "（已自动拆词）" : "";
+    add('搜「' + state.terms.join(" + ") + '」' + note, () => { state.q = ""; $("#q").value = ""; });
+  } else if(state.q.trim()){
+    add('搜「' + state.q.trim() + '」', () => { state.q = ""; $("#q").value = ""; });
+  }
 
   if(box.children.length){
     const cl = document.createElement("button");
@@ -489,9 +576,12 @@ function render(){
     if(state.onlySeen) cond.push("最近看过");
     const where = cond.length ? "在「" + cond.join(" · ") + "」范围内" : "在全库里";
     const q = state.q.trim();
+    const splitNote = state.autoSplit
+      ? '（已自动拆成「' + state.terms.join(" + ") + '」，要几个词同时出现）'
+      : '';
     box.innerHTML = '<div class="empty">没找到相关法规<br><small>'
-      + (q ? where + '没有含着「' + q + '」的文件' : where + '没有文件')
-      + '<br>可以换个更短的词（比如只搜「胶原」），或点「清除」放宽条件</small></div>';
+      + (q ? where + '没有同时含有「' + (state.terms.length ? state.terms.join(" + ") : q) + '」的文件' + splitNote : where + '没有文件')
+      + '<br>可以少写一个词、换个更短的词（比如只搜「胶原」），或点「清除」放宽条件</small></div>';
     $("#pager").innerHTML = "";
     return;
   }
@@ -509,7 +599,7 @@ function render(){
     const body = el("div","c-body");
     const a = el("a","c-title"); a.href=r.u; a.target="_blank"; a.rel="noreferrer";
     a.addEventListener("click", () => pushSeen(r));
-    a.appendChild(hl(r.t, state.q.trim()));
+    a.appendChild(hl(r.t, state.terms, "hN"));
     body.appendChild(a);
     const info = el("div","c-info");
     info.appendChild(el("span","pill "+(r.lv||"规范性文件"), r.lv||"规范性文件"));
@@ -520,6 +610,15 @@ function render(){
     if(r.n) info.appendChild(el("span",null,r.n));
     if(r.d) info.appendChild(el("span",null,r.d));
     for(const k of (r.sc||[]).slice(0,3)) info.appendChild(el("span","tag",k));
+    // 命中来自隐藏关键词（标题里没有这个词）：标出来，否则看着像瞎匹配
+    for(const t of (state.terms||[])){
+      if(t.length < 2) continue;
+      if(norm(r.t).indexOf(t) < 0 && norm(r.k||"").indexOf(t) >= 0){
+        const sp = el("span","tag kwtag","含：" + t);
+        sp.title = "这份文件的标题里没写，是附件/正文里包含的一册";
+        info.appendChild(sp);
+      }
+    }
     body.appendChild(info);
     card.appendChild(body);
     box.appendChild(card);

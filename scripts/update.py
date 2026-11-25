@@ -50,6 +50,15 @@ COLUMNS = [
     # 另外这是全站政策解读（药/妆/械混排），药品类在 build.py 阶段按 DRUG 规则剔除。
     dict(key="nmpa_zcjd", name="国家药监局-政策解读", level="政策解读", kind="scrapling",
          url="https://www.nmpa.gov.cn/xxgk/zhcjd/index.html", expect=None),
+    # 国家局「征求意见」栏目（1.0.1 新增）：全站混排（药品/化妆品/综合都会进来），
+    # device_only 过滤后约 177 条器械相关，含 2026-09-29《体外诊断试剂检查指导原则
+    # （征求意见稿）》这类只在综合司栏目发、CMDE 征求意见稿库里没有的文件。
+    # 注意别开 exclude_national：这里每条标题都以「国家药监局综合司」开头，会被剔光。
+    # 翻到 index_28（2002-10）为止：index_29 起是 2001-2002 的旧表格页，逐页看过只剩
+    # 药品条目（药品国家标准、非处方药说明书、年鉴征稿），没有器械的。
+    dict(key="nmpa_zqyj", name="国家药监局-征求意见", level="征求意见", kind="scrapling",
+         url="https://www.nmpa.gov.cn/xxgk/zhqyj/index.html", expect=None,
+         pages=29, device_only=True),
     dict(key="gd_gzwj", name="广东省药监局-工作文件", level="通知", kind="urllib",
          url="https://mpa.gd.gov.cn/zwgk/gzwj/index.html", expect=None,
          parser="gd", device_only=True, exclude_national=True),
@@ -429,6 +438,14 @@ def crawl(col, known, mode, sess):
     html = get(home)
     if not html:
         return [], None, 0, "首页打不开（被拦或网络不通）"
+    # NMPA 反爬会回 412 空壳页（约 5KB，长度判据拦不住），解析出来 0 条 →
+    # 页数算成 0 → 整栏静默 0 条、退出码还正常。解析 0 条就重抓两次，两次都空就明说。
+    for _ in range(2):
+        if parse(html, home):
+            break
+        html = get(home)
+    if not parse(html, home):
+        return [], None, 0, "首页解析 0 条（疑似反爬空壳页）"
 
     pages = total_pages(html) if col["kind"] == "scrapling" else maxpage_links(html)
     # 有些站的分页链接是 JS 生成的、源码里没有；栏目配置里写死页数兜底
