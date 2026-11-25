@@ -76,15 +76,15 @@ assets/qrcode.jpg             二维码
 
 ## 配合使用
 
-注册申报的设计输入，三件事：查法规、查标准、合成清单。
+注册申报的设计输入，三件事：查法规、查标准、按产品出清单。
 
 | 技能 | 管什么 |
 |---|---|
-| **医疗器械法规库（本仓库）** | 查有哪些**法规**适用 —— 条例、规章、指导原则 |
-| [医疗器械标准库](https://github.com/Alynxiao/medical-device-standards) | 查有哪些**标准**适用 —— 国标 GB、行标 YY 的目录和征求意见稿 |
-| [医疗器械产品法规标准清单生成器](https://github.com/Alynxiao/device-compliance-dossier) | 把查到的**合成一张清单** —— 分类编码、适用法规、GB/YY 标准，直接进 DHF |
+| **医疗器械法规库（本仓库）** | 汇总有哪些**法规** —— 条例、规章、指导原则 |
+| [医疗器械标准库](https://github.com/Alynxiao/medical-device-standards) | 汇总有哪些**标准** —— 国标 GB、行标 YY 的目录和征求意见稿 |
+| [医疗器械产品法规标准清单生成器](https://github.com/Alynxiao/device-compliance-dossier) | **按具体产品判定适用** —— 定分类编码，筛出这个产品该用的法规和标准，出清单进 DHF |
 
-前两个负责查，清单生成器负责出结果。
+前两个给的是全量目录，清单生成器负责从里面挑出这个产品真正适用的。
 
 ## 说明
 
