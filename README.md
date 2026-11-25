@@ -110,9 +110,9 @@ assets/qrcode.jpg             二维码
 
 | 技能 | 管什么 |
 |---|---|
-| **医疗器械法规库（本仓库）** | 汇总有哪些**法规** —— 条例、规章、指导原则 |
-| [医疗器械标准库](https://github.com/Alynxiao/medical-device-standards) | 汇总有哪些**标准** —— 国标 GB、行标 YY 的目录和征求意见稿 |
-| [医疗器械产品法规标准清单](https://github.com/Alynxiao/device-compliance-dossier) | **按具体产品判定适用** —— 定分类编码，筛出这个产品该用的法规和标准，出清单进 DHF |
+| **医疗器械法规库**（本仓库） | 有哪些**法规** —— 条例、规章、指导原则 |
+| [医疗器械标准库](https://github.com/Alynxiao/medical-device-standards) | 有哪些**标准** —— 国标 GB、行标 YY 与征求意见稿 |
+| [医疗器械产品法规标准清单](https://github.com/Alynxiao/device-compliance-dossier) | **按产品判定适用** —— 定分类编码，挑出该产品适用的法规与标准 |
 
 前两个给的是全量目录，清单负责从里面挑出这个产品真正适用的。
 
