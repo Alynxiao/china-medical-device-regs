@@ -284,17 +284,28 @@ unset PYTHONPATH && <装了 scrapling 的 python> run.py
 1. **找已装目录**：`SKILL.md` 里 `name: china-medical-device-regs` 的目录，或文件夹名 `中国医械法规库技能包` / `china-medical-device-regs`。找不到就问一句，别猜着覆盖。
 2. **取新版覆盖，两条路选一条——看用户手里有什么就能判断，不要反问「你要哪种」**：
 
-   **路一 · 他给的是 GitHub 地址**（默认，脚本自己上网拉）：
+   **路一 · 他给的是 GitHub 地址**（脚本自己上网拉）。老版本里没有 `upgrade.py`，所以第一步先把它取下来，**别去找「新版解压后的目录」，那一步是他没有的**：
    ```bash
-   python "<新版解压后的目录>/scripts/upgrade.py" --target "<已装目录>"
+   curl -L -o up.py https://raw.githubusercontent.com/Alynxiao/china-medical-device-regs/main/scripts/upgrade.py
    ```
-   连不上 github 加 `--proxy http://127.0.0.1:7890`（或先设 `http_proxy`）。
+   没 `curl` 或想跨平台，用这一行等价（不用 curl，纯 Python，Windows 上更稳）：
+   ```bash
+   python -c "import urllib.request as r; open('up.py','wb').write(r.urlopen('https://raw.githubusercontent.com/Alynxiao/china-medical-device-regs/main/scripts/upgrade.py',timeout=60).read())"
+   ```
+   **落盘位置就写 `up.py`（当前目录），别用 `/tmp`、`$TEMP` 这类写法**：Windows 上 curl 是原生程序，不认这种 MSYS 路径，会写到一个你看不见的地方，后面 `python up.py` 就报找不到文件。要指定目录就用 `D:/xxx/up.py` 这种原生形式。
+   拿不到 raw 就退一步取整个分支包 `<仓库地址>/archive/refs/heads/main.zip` 解压，用里面的 `scripts/upgrade.py`（这个 zip 路二也能直接吃）。连不上 github 要挂代理：`--proxy http://127.0.0.1:7890`（curl 是 `-x`，python 那行先 `set http_proxy=http://127.0.0.1:7890`）。
 
-   **路二 · 他给了压缩包（或 github 打不开，就让他/别人发一个 zip 过来）**：不走网络，直接吃那个包：
+   取到脚本后跑：
    ```bash
-   python "<新版解压后的目录>/scripts/upgrade.py" --target "<已装目录>" --from-zip "<他发来的那个.zip>"
+   python up.py --target "<已装目录>" --proxy http://127.0.0.1:7890
    ```
-   包里套两层目录（`中国医械法规库技能包/china-medical-device-regs/`）和只有一层（`china-medical-device-regs-main/`）都认得；已经解压好就换成 `--from-dir "<那个目录>"`。
+   能直连就省掉 `--proxy`。
+
+   **路二 · 他给了压缩包（或 github 打不开，就让他/别人发一个 zip 过来）**：不走网络。**他发的 zip 里就带着 `scripts/upgrade.py`**，解压后用包里那个：
+   ```bash
+   python "<解压出来的目录>/scripts/upgrade.py" --target "<已装目录>" --from-zip "<他发来的那个.zip>"
+   ```
+   包里套两层目录（`中国医械法规库技能包/china-medical-device-regs/`）和只有一层（`china-medical-device-regs-main/`）都认得；已经解压好就换成 `--from-dir "<那个目录>"`。Windows 右键打包的中文文件名（GBK）脚本自己会转，不用管乱码。
 
    **两条路是同一个脚本、同一套保护**：只覆盖白名单里的文件、`data/cn_regs.jsonl` 按 url 合并、旧文件进 `_backup/`、任何一步失败磁盘零改动（退出码 2）。**不要为「压缩包」另写一套拷贝逻辑**，那等于给「先删后拷」开口子。
 
